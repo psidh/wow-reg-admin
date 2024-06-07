@@ -20,8 +20,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <Toaster />
-      <h1 className="py-8">Admin | Scanner</h1>
-      <Scanner onScan={(result) => setData(result)} />
+      <h1 className="pt-8 pb-4">Admin | Scanner</h1>
       {data ? (
         <>
           <Detail email={email} />
@@ -31,6 +30,7 @@ export default function Home() {
           <p>Scan QR</p>
         </>
       )}
+      <Scanner onScan={(result) => setData(result)} />
     </div>
   );
 }
