@@ -26,7 +26,7 @@ export default function UserPage() {
         <p>{userData.email}</p>
       </div>
       <div className="w-[66%]">
-        <QRCode value={JSON.stringify(userData)} viewBox={`0 0 128 128`} size={32} level={"Q"} />
+        <QRCode value={JSON.stringify(userData)} viewBox={`0 0 128 128`} size={512} level={"Q"} />
       </div>
     </div>
   );
