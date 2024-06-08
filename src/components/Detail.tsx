@@ -12,6 +12,7 @@ export default function Detail({ email }: { email: string }) {
     uid: string;
   } | null>(null);
   const [userState, setUserState] = useState(0);
+  const [err, setErr] = useState<string | null>("");
   useEffect(() => {
     setUserState(2);
     fetch(
@@ -19,7 +20,7 @@ export default function Detail({ email }: { email: string }) {
       {
         method: "POST",
         body: JSON.stringify({
-          "attendee_email": email,
+          attendee_email: email,
         }),
       }
     ).then(async (res) => {
@@ -29,6 +30,7 @@ export default function Detail({ email }: { email: string }) {
         setUserData(userData);
       } else {
         setUserState(-1);
+        setErr(JSON.stringify(await res.json()))
       }
     });
   });
@@ -36,7 +38,7 @@ export default function Detail({ email }: { email: string }) {
     if (userState === 2) {
       return <div>Loading..</div>;
     } else if (userState === -1) {
-      return <div>Error..</div>;
+      return <div>Error: {err}</div>;
     }
     if (userState === 0) {
       return (
