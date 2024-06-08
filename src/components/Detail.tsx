@@ -19,7 +19,7 @@ export default function Detail({ email }: { email: string }) {
       {
         method: "POST",
         body: JSON.stringify({
-          "attendee-email": email,
+          "attendee_email": email,
         }),
       }
     ).then(async (res) => {
