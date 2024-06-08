@@ -20,7 +20,7 @@ export default function UserPage() {
   }
 
   return (
-    <div className="p-8 flex flex-col items-center justify-center h-fit w-full">
+    <div className="p-8 flex flex-col items-center h-fit w-full">
       <QRCode
         value={JSON.stringify({
           t1: userData.trackOne,
