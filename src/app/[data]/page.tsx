@@ -20,14 +20,19 @@ export default function UserPage() {
   }
 
   return (
-    <div className="flex px-[24px] py-1">
-      <div>
-        <p>{userData.name}</p>
-        <p>{userData.email}</p>
-      </div>
-      <div className="w-[66%]">
-        <QRCode value={JSON.stringify(userData)} viewBox={`0 0 128 128`} size={512} level={"Q"} />
-      </div>
+    <div className="p-8 flex flex-col items-center justify-center h-screen">
+      <QRCode
+        value={JSON.stringify({
+          t1: userData.trackOne,
+          t2: userData.trackTwo,
+          e: userData.email,
+          s: userData.tshirtSize,
+        })}
+        viewBox={`0 0 64 64`}
+        size={50}
+        level={"Q"}
+        style={{ height: "auto", maxWidth: "80%", width: "60%" }}
+      />
     </div>
   );
 }
