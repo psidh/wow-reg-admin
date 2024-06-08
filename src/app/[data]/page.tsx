@@ -20,7 +20,7 @@ export default function UserPage() {
   }
 
   return (
-    <div className="p-8 flex flex-col items-center justify-center h-screen">
+    <div className="p-8 flex flex-col items-center justify-center h-fit">
       <QRCode
         value={JSON.stringify({
           t1: userData.trackOne,
@@ -31,7 +31,7 @@ export default function UserPage() {
         viewBox={`0 0 64 64`}
         size={50}
         level={"Q"}
-        style={{ height: "auto", maxWidth: "80%", width: "60%" }}
+        style={{ height: "full", maxWidth: "90%", width: "80%" }}
       />
     </div>
   );
