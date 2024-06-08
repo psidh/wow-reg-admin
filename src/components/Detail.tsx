@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import QRCode from "react-qr-code";
+import { useRouter } from "next/navigation";
 
 export default function Detail({ email }: { email: string }) {
+  const router = useRouter();
   const [userData, setUserData] = useState<{
     email: string;
     name: string;
@@ -12,28 +13,51 @@ export default function Detail({ email }: { email: string }) {
     uid: string;
   } | null>(null);
   const [userState, setUserState] = useState(0);
-  const [err, setErr] = useState<string | null>("");
+  const [err, setErr] = useState<string | null>(null);
+
   useEffect(() => {
-    setUserState(2);
-    fetch(
-      "https://wow-2024-server.onrender.com/api/confirm-attendee-participation",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          attendee_email: email,
-        }),
-      }
-    ).then(async (res) => {
-      if (res.status == 200) {
-        const userData = (await res.json())["data"];
-        setUserState(1);
-        setUserData(userData);
-      } else {
+    const fetchData = async () => {
+      try {
+        setUserState(2);
+        const res = await fetch(
+          "https://wow-2024-server.onrender.com/api/confirm-attendee-participation",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              attendee_email: email,
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (res.status === 200) {
+          const userData = (await res.json())["data"];
+          setUserState(1);
+          setUserData(userData);
+        } else {
+          setUserState(-1);
+          setErr(JSON.stringify(await res.json()));
+        }
+      } catch (error: any) {
         setUserState(-1);
-        setErr(JSON.stringify(await res.json()))
+        setErr(error.message);
       }
-    });
-  });
+    };
+
+    if (email) {
+      fetchData();
+    }
+  }, [email]);
+
+  const handlePrintQR = () => {
+    if (userData) {
+      const userDataString = encodeURIComponent(JSON.stringify(userData));
+      router.push(`/user?data=${userDataString}`);
+    }
+  };
+
   if (email) {
     if (userState === 2) {
       return <div>Loading..</div>;
@@ -50,20 +74,14 @@ export default function Detail({ email }: { email: string }) {
         </div>
       );
     }
-    if (userState == 1 && userData != null) {
+    if (userState === 1 && userData !== null) {
       return (
         <div className="flex px-[24px] py-1">
-          <div>
-            <p>{userData["name"]}</p>
-            <p>{userData["email"]}</p>
-          </div>
-          <div className="w-[66%]">
-            <QRCode value={userData.toString()} viewBox={`0 0 256 256`} />
-          </div>
+          <button onClick={handlePrintQR}>Print QR</button>
         </div>
       );
     }
   } else {
-    <div>Scan</div>;
+    return <div>Scan</div>;
   }
 }
